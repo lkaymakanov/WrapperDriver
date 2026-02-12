@@ -6,7 +6,10 @@ import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
+import java.util.WeakHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -43,6 +46,7 @@ public class WrapperDriver implements Driver {
 	protected static final int 		DRIVER_MINOR_VERSION= 3;
 	protected static final boolean	DRIVER_JDBC_COMPIANT= true;
 	protected static final String 	WRAPPED_DRIVER_CLASS_PEOPERTY= "WRAPPED_DRIVER";
+	static final Map<Class<?>, IDriverLogger> LOGGERS = Collections.synchronizedMap(new WeakHashMap<>());
 	
 	static {
 		try {
@@ -57,11 +61,12 @@ public class WrapperDriver implements Driver {
 	
 	
 	
+	
 	public Connection connect(String url, java.util.Properties info) throws SQLException {
 		
 		try {
 			
-			boolean debugMode = url.indexOf(JDBC_DEBUG_URL_PREFIX) >= 0;
+			boolean debugMode = url.startsWith(JDBC_DEBUG_URL_PREFIX);
 
 	        // Clean the wrapper prefix
 	        String cleanUrl = url.replace(JDBC_URL_PREFIX, "").replace(JDBC_DEBUG_URL_PREFIX, "");
@@ -80,6 +85,9 @@ public class WrapperDriver implements Driver {
 	        Driver driver = DriverManager.getDriver(cleanUrl);
 			sysout(url, cleanUrl, debugMode, info);
 			
+			//register logger 
+			registerLoggerIfNeeded(info);
+			
 			//Connection testConnection = null; // debugMode? driver.connect(url, info) : null;
 			Connection mc = driver.connect(cleanUrl, info);
 			WrapperConnection conn = new WrapperConnection(mc, null, debugMode);
@@ -93,6 +101,37 @@ public class WrapperDriver implements Driver {
 	
 	
 	// --------------------------- Helper Methods ---------------------------
+	
+	private static void registerLoggerIfNeeded(Properties info) {
+	    String loggerClassName = info.getProperty("driverLogger");
+	   
+	    if (loggerClassName == null || loggerClassName.isEmpty()) {
+	        return;
+	    }
+	    info.remove("driverLogger");
+
+	    try {
+	    	ClassLoader cl = Thread.currentThread().getContextClassLoader();
+	        Class<?> clazz = Class.forName(loggerClassName, true, cl);
+
+	        if (!IDriverLogger.class.isAssignableFrom(clazz)) {
+	            throw new IllegalArgumentException(
+	                loggerClassName + " does not implement IDriverLogger");
+	        }
+
+	        synchronized (LOGGERS) {
+	            if (!LOGGERS.containsKey(clazz)) {
+	                IDriverLogger logger =
+	                        (IDriverLogger) clazz.getDeclaredConstructor().newInstance();
+	                LOGGERS.put(clazz, logger);
+	            }
+	        }
+
+	    } catch (Exception e) {
+	        throw new RuntimeException(
+	                "Failed to initialize driver logger: " + loggerClassName, e);
+	    }
+	}
 
 	private Properties extractCustomProps(String url) {
 	    Properties props = new Properties();
@@ -109,7 +148,13 @@ public class WrapperDriver implements Driver {
 	    return props;
 	}
 	
-	
+	static void log(String s) {
+	    synchronized (LOGGERS) {
+	        for (IDriverLogger l : LOGGERS.values()) {
+	            l.log(s);
+	        }
+	    }
+	}
 	
 	private static void sysout(String originalUrl,
             String cleanUrl,
@@ -176,7 +221,7 @@ public class WrapperDriver implements Driver {
 	}
 
 	public int getMinorVersion() {
-		return DRIVER_MAJOR_VERSION;
+		return DRIVER_MINOR_VERSION;
 	}
 
 
@@ -186,7 +231,6 @@ public class WrapperDriver implements Driver {
 
 	@Override
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
