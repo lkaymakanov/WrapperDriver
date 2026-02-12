@@ -31,8 +31,8 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 	
 	public WrapperCallableStatement(String aSql, CallableStatement aCStmt, 
 			WrapperConnection aParentConnection, String aQuery, 
-			Connection aTestConnection, boolean aDebugMode) {
-		super(aCStmt, aParentConnection, aQuery, aTestConnection, aDebugMode);
+			 boolean aDebugMode) {
+		super(aCStmt, aParentConnection, aQuery,  aDebugMode);
 		mCStmt = aCStmt;
 		String funcName[] = detectFunctionName(aSql);
 		boolean hasReturnParam = hasReturnParam(aSql);
@@ -242,8 +242,7 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 	}
 
 	
-	public void setBigDecimal(String s, BigDecimal bigdecimal)
-			throws SQLException {
+	public void setBigDecimal(String s, BigDecimal bigdecimal)throws SQLException {
 		mCStmt.setBigDecimal(s, bigdecimal);
 	}
 

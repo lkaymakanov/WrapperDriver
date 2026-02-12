@@ -28,12 +28,16 @@ public class WrapperPreparedStatement extends WrapperStatement implements Prepar
 	protected PreparedStatement mPStmt;
 	protected String mQuery;
 	protected Connection mTestConnection;
+	protected BindVariableDataDriver bindVariableData = new BindVariableDataDriver();
 	
-	public WrapperPreparedStatement(PreparedStatement aPStmt, WrapperConnection aParentConnection, String aQuery, Connection aTestConnection, boolean aDebugMode) {
+	public WrapperPreparedStatement(
+			PreparedStatement aPStmt, 
+			WrapperConnection aParentConnection, 
+			String aQuery, 
+			boolean aDebugMode) {
 		super(aPStmt, aParentConnection, aDebugMode);
 		mPStmt = aPStmt;
 		mQuery = aQuery;
-		mTestConnection = aTestConnection;
 	}
 	
 	public void clearParameters() throws SQLException {

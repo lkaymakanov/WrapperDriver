@@ -61,7 +61,6 @@ public class WrapperDriver implements Driver {
 		
 		try {
 			
-			
 			boolean debugMode = url.indexOf(JDBC_DEBUG_URL_PREFIX) >= 0;
 
 	        // Clean the wrapper prefix
