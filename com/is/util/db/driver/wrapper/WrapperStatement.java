@@ -9,7 +9,7 @@ import java.sql.Statement;
  * Wraps PostgreSQL's Statement.
  * Performs manipulation of input/output data where necessary and delegates execution to Postgres's driver.
  */
-public class WrapperStatement implements Statement {
+class WrapperStatement implements Statement {
 	
 	protected Statement mStmt;
 	protected WrapperConnection mParentConnection;

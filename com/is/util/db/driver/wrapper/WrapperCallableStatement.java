@@ -22,7 +22,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 
-public class WrapperCallableStatement extends WrapperPreparedStatement implements CallableStatement {
+class WrapperCallableStatement extends WrapperPreparedStatement implements CallableStatement {
 
 	@SuppressWarnings("unused")
 	private FunctionParams 	mParams;

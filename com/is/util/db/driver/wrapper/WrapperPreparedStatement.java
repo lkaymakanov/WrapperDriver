@@ -8,7 +8,7 @@ import java.net.URL;
 import java.sql.*;
 import java.util.Calendar;
 
-public class WrapperPreparedStatement extends WrapperStatement implements PreparedStatement {
+class WrapperPreparedStatement extends WrapperStatement implements PreparedStatement {
 
     protected PreparedStatement mPStmt;
     protected String mQuery;

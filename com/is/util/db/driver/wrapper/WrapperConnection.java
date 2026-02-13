@@ -21,7 +21,7 @@ import java.util.concurrent.Executor;
 
 
 
-public class WrapperConnection implements Connection {
+class WrapperConnection implements Connection {
 
 	private Connection mConn;
 	private boolean    mDebugMode;

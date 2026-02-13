@@ -26,7 +26,7 @@ import java.util.Map;
  * Performs data manipulation of input / output parameters, where needed to make
  * behavior similar to Oracle's JDBC driver
  */
-public class WrapperResultSet implements ResultSet{
+class WrapperResultSet implements ResultSet{
 	
 	ResultSet mRSet;
 	WrapperStatement mParentStatement;
