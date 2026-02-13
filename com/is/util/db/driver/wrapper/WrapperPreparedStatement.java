@@ -1,310 +1,356 @@
+
 package com.is.util.db.driver.wrapper;
 
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.NClob;
-import java.sql.ParameterMetaData;
-import java.sql.PreparedStatement;
-import java.sql.Ref;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.RowId;
-import java.sql.SQLException;
-import java.sql.SQLXML;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.Calendar;
 
-
 public class WrapperPreparedStatement extends WrapperStatement implements PreparedStatement {
-	
-	protected PreparedStatement mPStmt;
-	protected String mQuery;
-	protected Connection mTestConnection;
-	protected BindVariableDataDriver bindVariableData = new BindVariableDataDriver();
-	
-	public WrapperPreparedStatement(
-			PreparedStatement aPStmt, 
-			WrapperConnection aParentConnection, 
-			String aQuery, 
-			boolean aDebugMode) {
-		super(aPStmt, aParentConnection, aDebugMode);
-		mPStmt = aPStmt;
-		mQuery = aQuery;
-	}
-	
-	public void clearParameters() throws SQLException {
-		mPStmt.clearParameters();
+
+    protected PreparedStatement mPStmt;
+    protected String mQuery;
+    protected BindVariableDataDriver bindVariableData = new BindVariableDataDriver();
+
+    public WrapperPreparedStatement(PreparedStatement aPStmt, WrapperConnection aParentConnection, String aQuery, boolean aDebugMode) {
+        super(aPStmt, aParentConnection, aDebugMode);
+        this.mPStmt = aPStmt;
+        this.mQuery = aQuery;
+    }
+    // --------------------- Parameter Collection ---------------------
+
+    @Override
+    public void clearParameters() throws SQLException {
+        bindVariableData.getValues().clear();
+        mPStmt.clearParameters();
+    }
+
+    @Override
+    public void setInt(int parameterIndex, int x) throws SQLException {
+        bindVariableData.setInt(x, parameterIndex);
+        mPStmt.setInt(parameterIndex, x);
+    }
+
+    @Override
+    public void setLong(int parameterIndex, long x) throws SQLException {
+        bindVariableData.setLong(x, parameterIndex);
+        mPStmt.setLong(parameterIndex, x);
+    }
+
+    @Override
+    public void setShort(int parameterIndex, short x) throws SQLException {
+        bindVariableData.setShort(x, parameterIndex);
+        mPStmt.setShort(parameterIndex, x);
+    }
+
+    @Override
+    public void setString(int parameterIndex, String x) throws SQLException {
+        bindVariableData.setString(x, parameterIndex);
+        mPStmt.setString(parameterIndex, x);
+    }
+
+    @Override
+    public void setDouble(int parameterIndex, double x) throws SQLException {
+        bindVariableData.setDouble(x, parameterIndex);
+        mPStmt.setDouble(parameterIndex, x);
+    }
+
+    @Override
+    public void setFloat(int parameterIndex, float x) throws SQLException {
+        bindVariableData.setFloat(x, parameterIndex);
+        mPStmt.setFloat(parameterIndex, x);
+    }
+
+    @Override
+    public void setBoolean(int parameterIndex, boolean x) throws SQLException {
+        bindVariableData.setBoolean(x, parameterIndex);
+        mPStmt.setBoolean(parameterIndex, x);
+    }
+
+    @Override
+    public void setBigDecimal(int parameterIndex, BigDecimal x) throws SQLException {
+        bindVariableData.setBigDecimal(x, parameterIndex);
+        mPStmt.setBigDecimal(parameterIndex, x);
+    }
+
+    @Override
+    public void setDate(int parameterIndex, Date x) throws SQLException {
+        bindVariableData.setDate(x, parameterIndex);
+        mPStmt.setDate(parameterIndex, x);
+    }
+
+    @Override
+    public void setDate(int parameterIndex, Date x, Calendar cal) throws SQLException {
+        bindVariableData.setDate(x, parameterIndex);
+        mPStmt.setDate(parameterIndex, x, cal);
+    }
+
+    @Override
+    public void setTime(int parameterIndex, Time x) throws SQLException {
+        bindVariableData.setTime(x, parameterIndex);
+        mPStmt.setTime(parameterIndex, x);
+    }
+
+    @Override
+    public void setTime(int parameterIndex, Time x, Calendar cal) throws SQLException {
+        bindVariableData.setTime(x, parameterIndex);
+        mPStmt.setTime(parameterIndex, x, cal);
+    }
+
+    @Override
+    public void setTimestamp(int parameterIndex, Timestamp x) throws SQLException {
+        bindVariableData.setTimestamp(x, parameterIndex);
+        mPStmt.setTimestamp(parameterIndex, x);
+    }
+
+    @Override
+    public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
+        bindVariableData.setTimestamp(x, parameterIndex);
+        mPStmt.setTimestamp(parameterIndex, x, cal);
+    }
+
+    @Override
+    public void setNull(int parameterIndex, int sqlType) throws SQLException {
+        bindVariableData.setNull(parameterIndex, sqlType);
+        mPStmt.setNull(parameterIndex, sqlType);
+    }
+
+    @Override
+    public void setNull(int parameterIndex, int sqlType, String typeName) throws SQLException {
+        bindVariableData.setNull(parameterIndex, sqlType);
+        mPStmt.setNull(parameterIndex, sqlType, typeName);
+    }
+
+    @Override
+    public void setObject(int parameterIndex, Object x) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setObject(parameterIndex, x);
+    }
+
+    @Override
+    public void setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setObject(parameterIndex, x, targetSqlType);
+    }
+
+    @Override
+    public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
+    }
+
+    @Override
+    public void setBytes(int parameterIndex, byte[] x) throws SQLException {
+        bindVariableData.setBytes(x);
+        mPStmt.setBytes(parameterIndex, x);
+    }
+
+    @Override
+    public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setAsciiStream(parameterIndex, x, length);
+    }
+
+    @Override
+    public void setBinaryStream(int parameterIndex, InputStream x, int length) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setBinaryStream(parameterIndex, x, length);
+    }
+
+    @Override
+    public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException {
+        bindVariableData.setObject(reader, parameterIndex);
+        mPStmt.setCharacterStream(parameterIndex, reader, length);
+    }
+
+    @Override
+    public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setUnicodeStream(parameterIndex, x, length);
+    }
+
+    @Override
+    public void setBlob(int parameterIndex, Blob x) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setBlob(parameterIndex, x);
+    }
+
+    @Override
+    public void setClob(int parameterIndex, Clob x) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setClob(parameterIndex, x);
+    }
+
+    @Override
+    public void setArray(int parameterIndex, Array x) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setArray(parameterIndex, x);
+    }
+
+    @Override
+    public void setURL(int parameterIndex, URL x) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setURL(parameterIndex, x);
+    }
+
+    @Override
+    public void setRowId(int parameterIndex, RowId x) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setRowId(parameterIndex, x);
+    }
+
+    @Override
+    public void setNString(int parameterIndex, String value) throws SQLException {
+        bindVariableData.setString(value, parameterIndex);
+        mPStmt.setNString(parameterIndex, value);
+    }
+
+    @Override
+    public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException {
+        bindVariableData.setObject(value, parameterIndex);
+        mPStmt.setNCharacterStream(parameterIndex, value, length);
+    }
+
+    @Override
+    public void setNClob(int parameterIndex, NClob value) throws SQLException {
+        bindVariableData.setObject(value, parameterIndex);
+        mPStmt.setNClob(parameterIndex, value);
+    }
+
+    @Override
+    public void setClob(int parameterIndex, Reader reader, long length) throws SQLException {
+        bindVariableData.setObject(reader, parameterIndex);
+        mPStmt.setClob(parameterIndex, reader, length);
+    }
+
+    @Override
+    public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException {
+        bindVariableData.setObject(inputStream, parameterIndex);
+        mPStmt.setBlob(parameterIndex, inputStream, length);
+    }
+
+    @Override
+    public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
+        bindVariableData.setObject(reader, parameterIndex);
+        mPStmt.setNClob(parameterIndex, reader, length);
+    }
+
+    @Override
+    public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
+        bindVariableData.setObject(xmlObject, parameterIndex);
+        mPStmt.setSQLXML(parameterIndex, xmlObject);
+    }
+
+    @Override
+    public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setAsciiStream(parameterIndex, x, length);
+    }
+
+    @Override
+    public void setBinaryStream(int parameterIndex, InputStream x, long length) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setBinaryStream(parameterIndex, x, length);
+    }
+
+    @Override
+    public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException {
+        bindVariableData.setObject(reader, parameterIndex);
+        mPStmt.setCharacterStream(parameterIndex, reader, length);
+    }
+
+    @Override
+    public void setAsciiStream(int parameterIndex, InputStream x) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setAsciiStream(parameterIndex, x);
+    }
+
+    @Override
+    public void setBinaryStream(int parameterIndex, InputStream x) throws SQLException {
+        bindVariableData.setObject(x, parameterIndex);
+        mPStmt.setBinaryStream(parameterIndex, x);
+    }
+
+    @Override
+    public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException {
+        bindVariableData.setObject(reader, parameterIndex);
+        mPStmt.setCharacterStream(parameterIndex, reader);
+    }
+
+    @Override
+    public void setNCharacterStream(int parameterIndex, Reader reader) throws SQLException {
+        bindVariableData.setObject(reader, parameterIndex);
+        mPStmt.setNCharacterStream(parameterIndex, reader);
+    }
+
+    @Override
+    public void setClob(int parameterIndex, Reader reader) throws SQLException {
+        bindVariableData.setObject(reader, parameterIndex);
+        mPStmt.setClob(parameterIndex, reader);
+    }
+
+    @Override
+    public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException {
+        bindVariableData.setObject(inputStream, parameterIndex);
+        mPStmt.setBlob(parameterIndex, inputStream);
+    }
+
+    @Override
+    public void setNClob(int parameterIndex, Reader reader) throws SQLException {
+        bindVariableData.setObject(reader, parameterIndex);
+        mPStmt.setNClob(parameterIndex, reader);
+    }
+
+    // --------------------- Execution Logging ---------------------
+
+    @Override
+    public boolean execute() throws SQLException {
+        long start = System.nanoTime();
+        boolean result = mPStmt.execute();
+        log(start);
+        return result;
+    }
+
+    @Override
+    public int executeUpdate() throws SQLException {
+    	long start = System.nanoTime();
+        int rows = mPStmt.executeUpdate();
+        log(start);
+        return rows;
+    }
+
+    @Override
+    public ResultSet executeQuery() throws SQLException {
+    	long start = System.nanoTime();
+        ResultSet rs = mPStmt.executeQuery();
+        log(start);
+        return new WrapperResultSet(rs, this, mDebugMode);
+    }
+    
+    private void log(long start) {
+   	    long elapsed = (System.nanoTime() - start) / 1_000_000;
+        if (mDebugMode){
+            String sqlForLog = bindVariableData.sqlForLog(mQuery);
+            WrapperDriver.logFunction.accept(sqlForLog + " | executed in " + elapsed + "ms");
+        }
+        bindVariableData.getValues().clear();
+   }
+
+    // --------------------- Delegate Remaining Methods ---------------------
+    @Override public void addBatch() throws SQLException { mPStmt.addBatch(); }
+    @Override public ResultSetMetaData getMetaData() throws SQLException { return mPStmt.getMetaData(); }
+    @Override public ParameterMetaData getParameterMetaData() throws SQLException { return mPStmt.getParameterMetaData(); }
+    //@Override public PreparedStatement getWrappedPreparedStatement() { return mPStmt; }
+
+	@Override
+	public void setByte(int parameterIndex, byte x) throws SQLException {
+		mPStmt.setByte(parameterIndex, x);
 	}
 
-	public boolean execute() throws SQLException {
-		return mPStmt.execute();
+	@Override
+	public void setRef(int parameterIndex, Ref x) throws SQLException {
+		mPStmt.setRef(parameterIndex, x);
 	}
-
-	public ResultSet executeQuery() throws SQLException {
-		return new WrapperResultSet(mPStmt.executeQuery(), this, mDebugMode);
-	}
-
-	public int executeUpdate() throws SQLException {
-		return mPStmt.executeUpdate();
-	}
-
-	public void setAsciiStream(int arg0, InputStream arg1, int arg2) throws SQLException {
-		mPStmt.setAsciiStream(arg0, arg1, arg2);
-	}
-
-	public void setBigDecimal(int arg0, BigDecimal arg1) throws SQLException {
-		mPStmt.setBigDecimal(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setBigDecimal, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setBinaryStream(int arg0, InputStream arg1, int arg2) throws SQLException {
-		mPStmt.setBinaryStream(arg0, arg1, arg2);
-	}
-
-	public void setBoolean(int arg0, boolean arg1) throws SQLException {
-		mPStmt.setBoolean(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setBoolean, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setByte(int arg0, byte arg1) throws SQLException {
-		mPStmt.setByte(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setByte, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setBytes(int arg0, byte[] arg1) throws SQLException {
-		mPStmt.setBytes(arg0, arg1);
-	}
-
-	public void setDate(int arg0, Date arg1) throws SQLException {
-		mPStmt.setDate(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setDate, mParentConnection.getTestConnection(), mDebugMode);
-	}
-	
-	public void setDate(int arg0, Date arg1, Calendar arg2) throws SQLException {
-		mPStmt.setDate(arg0, arg1, arg2);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setDate, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setDouble(int arg0, double arg1) throws SQLException {
-		mPStmt.setDouble(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setDouble, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setFloat(int arg0, float arg1) throws SQLException {
-		mPStmt.setFloat(arg0,arg1 );
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setFloat, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setInt(int arg0, int arg1) throws SQLException {
-		mPStmt.setInt(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setInt, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setLong(int arg0, long arg1) throws SQLException {
-		mPStmt.setLong(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setLong, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setNull(int arg0, int arg1) throws SQLException {
-		mPStmt.setNull(arg0, arg1);
-	}
-
-	public void setObject(int arg0, Object arg1) throws SQLException {
-		mPStmt.setObject(arg0, arg1);
-	}
-
-	public void setObject(int arg0, Object arg1, int arg2) throws SQLException {
-		mPStmt.setObject(arg0, arg1, arg2);
-	}
-
-	public void setObject(int arg0, Object arg1, int arg2, int arg3) throws SQLException {
-		mPStmt.setObject(arg0, arg1, arg2, arg3);
-	}
-
-	public void setShort(int arg0, short arg1) throws SQLException {
-		mPStmt.setShort(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setShort, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setString(int arg0, String arg1) throws SQLException {
-		mPStmt.setString(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setString, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setTime(int arg0, Time arg1) throws SQLException {
-		mPStmt.setTime(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setTime, mParentConnection.getTestConnection(), mDebugMode);
-	}
-	
-	public void setTime(int arg0, Time arg1, Calendar arg2) throws SQLException {
-		mPStmt.setTime(arg0, arg1, arg2);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setTime, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setTimestamp(int arg0, Timestamp arg1) throws SQLException {
-		mPStmt.setTimestamp(arg0, arg1);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setTimestamp, mParentConnection.getTestConnection(), mDebugMode);
-	}
-	
-	public void setTimestamp(int arg0, Timestamp arg1, Calendar arg2) throws SQLException {
-		mPStmt.setTimestamp(arg0, arg1, arg2);
-		//InParams.setPreparedParameter(mPStmt, arg0, arg1, mQuery, SettersEnum.setTimestamp, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	public void setUnicodeStream(int arg0, InputStream arg1, int arg2) throws SQLException {
-		mPStmt.setUnicodeStream(arg0, arg1, arg2);
-	}
-	
-	public ResultSetMetaData getMetaData() throws SQLException{
-		return mPStmt.getMetaData();
-	}
-	
-	public void setRef(int arg0,Ref arg1) throws SQLException {
-		mPStmt.setRef(arg0, arg1);
-	}
-	
-	public void addBatch() throws SQLException {
-		mPStmt.addBatch();
-	}
-
-	public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException {
-		mPStmt.setCharacterStream(parameterIndex, reader, length);
-	}
-
-	public void setBlob (int i, Blob x) throws SQLException {
-		mPStmt.setBlob (i, x);
-	}
-
-	public void setClob (int i, Clob x) throws SQLException {
-		mPStmt.setClob (i, x);
-	}
-
-	public void setArray (int i, Array x) throws SQLException {
-		mPStmt.setArray (i, x);
-	}
-
-	public void setNull (int paramIndex, int sqlType, String typeName) throws SQLException {
-		mPStmt.setNull (paramIndex, sqlType, typeName);
-	}
-
-	public void setURL(int parameterIndex, URL x) throws SQLException {
-		mPStmt.setURL(parameterIndex, x);
-	}
-
-	public ParameterMetaData getParameterMetaData() throws SQLException {
-		return mPStmt.getParameterMetaData();
-	}
-
-
-	
-	public void setRowId(int i, RowId rowid) throws SQLException {
-		(mPStmt).setRowId(i, rowid);
-	}
-
-	
-	public void setNString(int i, String s) throws SQLException {
-		mPStmt.setNString(i, s);
-		//InParams.setPreparedParameter(mPStmt, i, s, mQuery, SettersEnum.setString, mParentConnection.getTestConnection(), mDebugMode);
-	}
-
-	
-	public void setNCharacterStream(int i, Reader reader, long l)
-			throws SQLException {
-		(mPStmt).setNCharacterStream(i, reader, l);
-	}
-
-	
-	public void setNClob(int i, NClob nclob) throws SQLException {
-		(mPStmt).setNClob(i, nclob);
-	}
-
-	
-	public void setClob(int i, Reader reader, long l) throws SQLException {
-		mPStmt.setClob(i, reader, l);	
-	}
-
-	
-	public void setBlob(int i, InputStream inputstream, long l)
-			throws SQLException {
-		mPStmt.setBlob(i, inputstream, l);
-	}
-
-	
-	public void setNClob(int i, Reader reader, long l) throws SQLException {
-		mPStmt.setNClob(i, reader, l);
-	}
-
-	
-	public void setSQLXML(int i, SQLXML sqlxml) throws SQLException {
-		(mPStmt).setSQLXML(i, sqlxml);
-	}
-
-	
-	public void setAsciiStream(int i, InputStream inputstream, long l)
-			throws SQLException {
-		mPStmt.setAsciiStream(i, inputstream, l);
-	}
-
-	
-	public void setBinaryStream(int i, InputStream inputstream, long l)
-			throws SQLException {
-		mPStmt.setBinaryStream(i, inputstream, l);
-	}
-
-	
-	public void setCharacterStream(int i, Reader reader, long l)
-			throws SQLException {
-		mPStmt.setCharacterStream(i, reader, l);
-	}
-
-	
-	public void setAsciiStream(int i, InputStream inputstream)
-			throws SQLException {
-		mPStmt.setAsciiStream(i, inputstream);
-	}
-
-	
-	public void setBinaryStream(int i, InputStream inputstream)
-			throws SQLException {
-		mPStmt.setBinaryStream(i, inputstream);
-	}
-
-	
-	public void setCharacterStream(int i, Reader reader) throws SQLException {
-		mPStmt.setCharacterStream(i, reader);
-	}
-
-	
-	public void setNCharacterStream(int i, Reader reader) throws SQLException {
-		// Oracle's setNCharacterStream(int i, Reader reader) hangs on the tests! Because of this Postgre's is not tested!
-		(mPStmt).setNCharacterStream(i, reader);
-	}
-
-	
-	public void setClob(int i, Reader reader) throws SQLException {
-		mPStmt.setClob(i, reader);
-	}
-
-	
-	public void setBlob(int i, InputStream inputstream) throws SQLException {
-		mPStmt.setBlob(i, inputstream);
-	}
-
-	
-	public void setNClob(int i, Reader reader) throws SQLException {
-		mPStmt.setNClob(i, reader);
-	}
-	
-	public PreparedStatement getWrappedPreparedStatement(){
-		return mPStmt;
-	}
-	
 }

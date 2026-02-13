@@ -1,6 +1,6 @@
 package com.is.util.db.driver.wrapper;
 
-public class Constants {
+class Constants {
 
 	public static final String CALL_STMT_BEGIN = "\\s*\\{\\s*\\??\\s*=?\\s*call\\s*";
 	public static final String CALL_STMT_END = "\\s*\\(.*\\)\\s*\\}\\s*";

@@ -8,7 +8,6 @@ import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Clob;
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
 import java.sql.NClob;
@@ -30,9 +29,9 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 	private CallableStatement mCStmt;
 	
 	public WrapperCallableStatement(String aSql, CallableStatement aCStmt, 
-			WrapperConnection aParentConnection, String aQuery, 
+			WrapperConnection aParentConnection, 
 			 boolean aDebugMode) {
-		super(aCStmt, aParentConnection, aQuery,  aDebugMode);
+		super(aCStmt, aParentConnection, aSql,  aDebugMode);
 		mCStmt = aCStmt;
 		String funcName[] = detectFunctionName(aSql);
 		boolean hasReturnParam = hasReturnParam(aSql);
@@ -43,19 +42,45 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 		}
 	}
 
+	//===================== register out param ==========================
+	public void registerOutParameter(int i, int j, String s)
+			throws SQLException {
+		mCStmt.registerOutParameter(i, j, s);
+	}
+
+	
+	public void registerOutParameter(String s, int i) throws SQLException {
+		mCStmt.registerOutParameter(s, i);
+	}
+
+	
+	public void registerOutParameter(String s, int i, int j)
+			throws SQLException {
+		mCStmt.registerOutParameter(s, i, j);
+	}
+
+	
+	public void registerOutParameter(String s, int i, String s1)
+			throws SQLException {
+		mCStmt.registerOutParameter(s, i, s1);
+	}
+
 	
 	public void registerOutParameter(int i, int j) throws SQLException {
 		mCStmt.registerOutParameter(i, j);
+		bindVariableData.registerOutParameter(j, i);
 	}
 
 	
 	public void registerOutParameter(int i, int j, int k) throws SQLException {
-		(mCStmt).registerOutParameter(i, j, k);
+		mCStmt.registerOutParameter(i, j, k);
+		bindVariableData.registerOutParameter(j, i);
 	}
-
+	//===================== register out param =============================
+	
 	
 	public boolean wasNull() throws SQLException {
-		return (mCStmt).wasNull();
+		return mCStmt.wasNull();
 	}
 
 	
@@ -105,7 +130,7 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 
 	
 	public byte[] getBytes(int i) throws SQLException {
-		return (mCStmt).getBytes(i);
+		return mCStmt.getBytes(i);
 	}
 
 	
@@ -125,7 +150,7 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 
 	
 	public Object getObject(int i) throws SQLException {
-		return (mCStmt).getObject(i);
+		return mCStmt.getObject(i);
 	}
 
 	
@@ -135,17 +160,17 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 
 	
 	public Blob getBlob(int i) throws SQLException {
-		return (mCStmt).getBlob(i);
+		return mCStmt.getBlob(i);
 	}
 
 	
 	public Clob getClob(int i) throws SQLException {
-		return (mCStmt).getClob(i);
+		return mCStmt.getClob(i);
 	}
 
 	
 	public Array getArray(int i) throws SQLException {
-		return (mCStmt).getArray(i);
+		return mCStmt.getArray(i);
 	}
 
 	
@@ -162,48 +187,19 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 	public Timestamp getTimestamp(int i, Calendar calendar) throws SQLException {
 		return mCStmt.getTimestamp( i, calendar);
 	}
-
-	
-	public void registerOutParameter(int i, int j, String s)
-			throws SQLException {
-		
-		(mCStmt).registerOutParameter(i, j, s);
-	}
-
-	
-	public void registerOutParameter(String s, int i) throws SQLException {
-		
-		
-		(mCStmt).registerOutParameter(s, i);
-	}
-
-	
-	public void registerOutParameter(String s, int i, int j)
-			throws SQLException {
-		
-		(mCStmt).registerOutParameter(s, i, j);
-	}
-
-	
-	public void registerOutParameter(String s, int i, String s1)
-			throws SQLException {
-		
-		mCStmt.registerOutParameter(s, i, s1);
-	}
-
 	
 	public URL getURL(int i) throws SQLException {
-		return (mCStmt).getURL(i);
+		return mCStmt.getURL(i);
 	}
 
 	
 	public void setURL(String s, URL url) throws SQLException {
-		(mCStmt).setURL(s, url);
+		mCStmt.setURL(s, url);
 	}
 
 	
 	public void setNull(String s, int i) throws SQLException {
-		(mCStmt).setNull(s, i);
+		mCStmt.setNull(s, i);
 	}
 
 	
@@ -253,7 +249,7 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 
 	
 	public void setBytes(String s, byte[] abyte0) throws SQLException {
-		(mCStmt).setBytes(s, abyte0);
+		mCStmt.setBytes(s, abyte0);
 	}
 
 	
@@ -274,13 +270,13 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 	
 	public void setAsciiStream(String s, InputStream inputstream, int i)
 			throws SQLException {
-		(mCStmt).setAsciiStream(s, inputstream, i);
+		mCStmt.setAsciiStream(s, inputstream, i);
 	}
 
 	
 	public void setBinaryStream(String s, InputStream inputstream, int i)
 			throws SQLException {
-		(mCStmt).setBinaryStream(s, inputstream, i);
+		mCStmt.setBinaryStream(s, inputstream, i);
 	}
 
 	
@@ -300,9 +296,8 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 	}
 
 	
-	public void setCharacterStream(String s, Reader reader, int i)
-			throws SQLException {
-			(mCStmt).setCharacterStream(s, reader, i);
+	public void setCharacterStream(String s, Reader reader, int i) throws SQLException {
+		mCStmt.setCharacterStream(s, reader, i);
 	}
 
 	
@@ -616,120 +611,120 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 
 	
 	public void setBlob(String s, InputStream inputstream) throws SQLException {
-		(mCStmt).setBlob(s, inputstream);
+		mCStmt.setBlob(s, inputstream);
 	}
 
 	
 	public void setNClob(String s, Reader reader) throws SQLException {
-		(mCStmt).setNClob(s, reader);
+		mCStmt.setNClob(s, reader);
 	}
 
 	
 	public void setBoolean(int arg0, boolean arg1) throws SQLException {
-		mCStmt.setBoolean(arg0, arg1);
+		super.setBoolean(arg0, arg1);
 	}
 
 	
 	public void setByte(int arg0, byte arg1) throws SQLException {
-		mCStmt.setByte(arg0, arg1);
+		super.setByte(arg0, arg1);
 	}
 
 	
 	public void setDate(int arg0, Date arg1) throws SQLException {
-		mCStmt.setDate(arg0, arg1);
+		super.setDate(arg0, arg1);
 	}
 
 	
 	public void setDate(int arg0, Date arg1, Calendar arg2) throws SQLException {
-		mCStmt.setDate(arg0, arg1, arg2);
+		super.setDate(arg0, arg1, arg2);
 	}
 
 	
 	public void setDouble(int arg0, double arg1) throws SQLException {
-		mCStmt.setDouble(arg0, arg1);
+		super.setDouble(arg0, arg1);
 	}
 
 	
 	public void setFloat(int arg0, float arg1) throws SQLException {
-		mCStmt.setFloat(arg0, arg1);
+		super.setFloat(arg0, arg1);
 	}
 
 	
 	public void setInt(int arg0, int arg1) throws SQLException {
-		mCStmt.setInt(arg0, arg1);
+		super.setInt(arg0, arg1);
 	}
 
 	
 	public void setLong(int arg0, long arg1) throws SQLException {
-		mCStmt.setLong(arg0, arg1);
+		super.setLong(arg0, arg1);
 	}
 
 	
 	public void setShort(int arg0, short arg1) throws SQLException {
-		mCStmt.setShort(arg0, arg1);
+		super.setShort(arg0, arg1);
 	}
 
 	
 	public void setString(int arg0, String arg1) throws SQLException {
-		mCStmt.setString(arg0, arg1);
+		super.setString(arg0, arg1);
 	}
 
 	
 	public void setTime(int arg0, Time arg1) throws SQLException {
-		mCStmt.setTime(arg0, arg1);
+		super.setTime(arg0, arg1);
 	}
 
 	
 	public void setTime(int arg0, Time arg1, Calendar arg2) throws SQLException {
-		mCStmt.setTime(arg0, arg1, arg2);
+		super.setTime(arg0, arg1, arg2);
 	}
 
 	
 	public void setTimestamp(int arg0, Timestamp arg1) throws SQLException {
-		mCStmt.setTimestamp(arg0, arg1);
+		super.setTimestamp(arg0, arg1);
 	}
 
 	
 	public void setTimestamp(int arg0, Timestamp arg1, Calendar arg2)
 			throws SQLException {
-		mCStmt.setTimestamp(arg0, arg1, arg2);
+		super.setTimestamp(arg0, arg1, arg2);
 	}
 	
 	
 	public void setBigDecimal(int arg0, BigDecimal arg1) throws SQLException {
-		mCStmt.setBigDecimal(arg0, arg1);
+		super.setBigDecimal(arg0, arg1);
 	}
 
 	
 	public void setNull(int arg0, int arg1) throws SQLException {
-		mCStmt.setNull(arg0, arg1);
+		super.setNull(arg0, arg1);
 	}
 
 	
 	public void setNull(int paramIndex, int sqlType, String typeName)
 			throws SQLException {
-		mCStmt.setNull(paramIndex, sqlType, typeName);
+		super.setNull(paramIndex, sqlType, typeName);
 	}
 
 	
 	public void setNString(int i, String s) throws SQLException {
-		mCStmt.setNString(i, s);
+		super.setNString(i, s);
 	}
 
 	
 	public void setObject(int arg0, Object arg1) throws SQLException {
-		mCStmt.setObject(arg0, arg1);
+		super.setObject(arg0, arg1);
 	}
 
 	
 	public void setObject(int arg0, Object arg1, int arg2) throws SQLException {
-		mCStmt.setObject(arg0, arg1, arg2);
+		super.setObject(arg0, arg1, arg2);
 	}
 
 	
 	public void setObject(int arg0, Object arg1, int arg2, int arg3)
 			throws SQLException {
-		mCStmt.setObject(arg0, arg1, arg2, arg3);
+		super.setObject(arg0, arg1, arg2, arg3);
 	}
 
 	protected String[] detectFunctionName(String aSql) {
@@ -746,7 +741,6 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 	@Override
 	public <T> T getObject(int parameterIndex, Class<T> type)
 			throws SQLException {
-		// TODO Auto-generated method stub
 		return mCStmt.getObject(parameterIndex, type);
 	}
 
@@ -754,7 +748,6 @@ public class WrapperCallableStatement extends WrapperPreparedStatement implement
 	@Override
 	public <T> T getObject(String parameterName, Class<T> type)
 			throws SQLException {
-		// TODO Auto-generated method stub
 		return mCStmt.getObject(parameterName, type);
 	}
 	

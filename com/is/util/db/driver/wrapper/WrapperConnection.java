@@ -40,7 +40,6 @@ public class WrapperConnection implements Connection {
 	}
 
 	public void commit() throws SQLException {
-	    System.out.println("================== Transaction commited ============= ");
 		mConn.commit();
 	}
 
@@ -81,7 +80,7 @@ public class WrapperConnection implements Connection {
 	}
 
 	public CallableStatement prepareCall(String arg0) throws SQLException {
-		return new WrapperCallableStatement(arg0, mConn.prepareCall(arg0), this, arg0,  mDebugMode);
+		return new WrapperCallableStatement(arg0, mConn.prepareCall(arg0), this,   mDebugMode);
 	}
 
 	public PreparedStatement prepareStatement(String arg0) throws SQLException {
@@ -109,12 +108,10 @@ public class WrapperConnection implements Connection {
 	}
 
 	public void rollback() throws SQLException {
-		System.out.println("================== Transaction rollbacked ============= ");
 		mConn.rollback();
 	}
 
 	public void setAutoCommit(boolean arg0) throws SQLException {
-		System.out.println("================== Transaction begin ============= ");
 		mConn.setAutoCommit(arg0);
 	}
 
@@ -140,7 +137,7 @@ public class WrapperConnection implements Connection {
 
     public CallableStatement prepareCall(String sql, int resultSetType, 
 				  int resultSetConcurrency) throws SQLException {
-    	return new WrapperCallableStatement(sql, mConn.prepareCall(sql, resultSetType, resultSetConcurrency), this, sql,  mDebugMode);
+    	return new WrapperCallableStatement(sql, mConn.prepareCall(sql, resultSetType, resultSetConcurrency), this,  mDebugMode);
     }
    
     public void setHoldability(int holdability) throws SQLException {
@@ -159,7 +156,6 @@ public class WrapperConnection implements Connection {
 
     
     public void rollback(Savepoint savepoint) throws SQLException {
-    	System.out.println("================== Transaction rollbacked ============= ");
     	mConn.rollback(savepoint);
     }
 
@@ -177,7 +173,7 @@ public class WrapperConnection implements Connection {
     public CallableStatement prepareCall(String sql, int resultSetType, 
 				  int resultSetConcurrency, 
 				  int resultSetHoldability) throws SQLException {
-    	return new WrapperCallableStatement(sql, mConn.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability), this, sql,  mDebugMode);
+    	return new WrapperCallableStatement(sql, mConn.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability), this,   mDebugMode);
     }
 
 	

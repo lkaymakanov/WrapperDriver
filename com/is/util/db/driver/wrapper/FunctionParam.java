@@ -1,6 +1,6 @@
 package com.is.util.db.driver.wrapper;
 
-public class FunctionParam {
+class FunctionParam {
 
     String columnName;
     short  columnReturn;

@@ -96,6 +96,10 @@ class BindVariableInfoDriver {
 
 	void setSetInPreparedStatement() {
 		this.setInPreparedStatement = true;
+	}
+
+	public String getMetaData() {
+		return null;
 	}	
 	
 	

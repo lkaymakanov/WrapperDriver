@@ -3,7 +3,7 @@ package com.is.util.db.driver.wrapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FunctionParams {
+class FunctionParams {
 
 	String procedureCatalog;
     String procedureSchema;
@@ -11,7 +11,9 @@ public class FunctionParams {
     
     List<FunctionParam> params = new ArrayList<FunctionParam>();
 
-    public FunctionParams(String procedureCatalog, String procedureSchema,
+    public FunctionParams(
+    		String procedureCatalog, 
+    		String procedureSchema,
 			String procedureName) {
 		super();
 		this.procedureCatalog = procedureCatalog;

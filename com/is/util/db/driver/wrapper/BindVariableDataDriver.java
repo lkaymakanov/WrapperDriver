@@ -18,6 +18,7 @@ import java.util.Map;
 
 
 
+
 /**
  * The Class BindVariableData.
  */
@@ -473,7 +474,7 @@ class BindVariableDataDriver {
 			for(int i=0,j=1;i<chars.length;i++){
 				//TODO Handle question marks that are escaped
 				if('?'==chars[i]){
-					BindVariableInfoDriver pstmp=values.get(j);
+					BindVariableInfoDriver pstmp = values.get(j);
 					j++;
 					if(pstmp!=null){
 						sb.append(strForLog(pstmp));
@@ -498,6 +499,8 @@ class BindVariableDataDriver {
 		return values;
 	}
 
+
+	
 	/**
 	 * Str for log.
 	 *
@@ -505,37 +508,55 @@ class BindVariableDataDriver {
 	 * @return the string
 	 */
 	private String strForLog(BindVariableInfoDriver aPstmp) {
+		long f = 1;
 		if(aPstmp.getValue()!=null){
+			if(aPstmp.IsOutputParam()) return "/*$Out"+  getMeta(aPstmp, false, isVerbose(f)) +"*/";
 			switch(aPstmp.getType()){
-			case Types.INTEGER:
-			case Types.DOUBLE:
-			case Types.BIGINT:
-			case Types.DECIMAL:
-			case Types.FLOAT:
-				return ""+aPstmp.getValue();
-			case Types.BOOLEAN:
-				return (Boolean)aPstmp.getValue()?""+1:""+0;
-			case Types.DATE:
-				return "'"+DATE_FORMAT.format(aPstmp.getValue())+"'";
-			case Types.TIMESTAMP:
-				return "'"+TIMESTAMP_FORMAT.format(aPstmp.getValue())+"'";
-			case Types.TIME:
-				return "'"+TIME_FORMAT.format(aPstmp.getValue())+"'";
-			case Types.CHAR:
-			case Types.NCHAR:
-			case Types.VARCHAR:
-			case Types.NVARCHAR:
-			case Types.LONGVARCHAR:
-			case Types.LONGNVARCHAR:
-				return "'"+aPstmp.getValue()+"'";
-			default:
-				return aPstmp.getValue().getClass().getName();
+				case Types.INTEGER:
+				case Types.DOUBLE:
+				case Types.BIGINT:
+				case Types.DECIMAL:
+				case Types.FLOAT:
+					return ""+aPstmp.getValue() + getMeta(aPstmp,f);
+				case Types.BOOLEAN:
+					return ((Boolean)aPstmp.getValue()?""+1:""+0) + getMeta(aPstmp, f);
+				case Types.DATE:
+					return "'"+DATE_FORMAT.format(aPstmp.getValue())+"'" + getMeta(aPstmp,f);
+				case Types.TIMESTAMP:
+					return "'"+TIMESTAMP_FORMAT.format(aPstmp.getValue())+"'" + getMeta(aPstmp,f);
+				case Types.TIME:
+					return "'"+TIME_FORMAT.format(aPstmp.getValue())+"'"+ getMeta(aPstmp,f);
+				case Types.CHAR:
+				case Types.NCHAR:
+				case Types.VARCHAR:
+				case Types.NVARCHAR:
+				case Types.LONGVARCHAR:
+				case Types.LONGNVARCHAR:
+					return "'"+aPstmp.getValue()+"'" + getMeta(aPstmp,f);
+				case Types.OTHER:
+					return aPstmp.getValue().toString() + getMeta(aPstmp, f);
+				default:
+					return aPstmp.getValue().getClass().getName()+ getMeta(aPstmp,f);
 			}
 		}
-		return "null";
+		return "null" + getMeta(aPstmp,1);
+	}
+	
+	private static String getMeta(BindVariableInfoDriver aPstmp, long f) {
+		return getMeta(aPstmp, true, isVerbose(f));
+	}
+	
+	private static boolean isVerbose(long f) {
+		boolean b = (f&(1<<0))!=0;
+		return b;
 	}
 
-
+	private static String getMeta(BindVariableInfoDriver aPstmp, boolean comment, boolean verbose) {
+		if(aPstmp.getMetaData() == null) return "";
+		if(!verbose) return "";
+		if(!comment) return aPstmp.getMetaData();
+		return  "/*" + aPstmp.getMetaData() +"*/";
+	}
 
 
 }

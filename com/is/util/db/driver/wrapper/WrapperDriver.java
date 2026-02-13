@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.WeakHashMap;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 /**
@@ -59,6 +60,13 @@ public class WrapperDriver implements Driver {
 
     // Global registry of driver loggers by class (weak references for container safety)
     static final Map<Class<?>, IDriverLogger> LOGGERS = Collections.synchronizedMap(new WeakHashMap<>());
+    
+    //register test logger
+    static {
+    	LOGGERS.putIfAbsent(SysoLogger.class, new SysoLogger());
+    }
+    
+    static final Consumer<String> logFunction = WrapperDriver::log;
 
     // Register the wrapper driver with DriverManager at class load time
     static {
@@ -70,7 +78,6 @@ public class WrapperDriver implements Driver {
     }
 
     public WrapperDriver() {
-        // Default constructor
     }
 
     /**
@@ -183,7 +190,7 @@ public class WrapperDriver implements Driver {
     /**
      * Logs a message to all registered driver loggers.
      */
-    static void log(String s) {
+    private static void log(String s) {
         synchronized (LOGGERS) {
             for (IDriverLogger l : LOGGERS.values()) {
                 l.log(s);
@@ -196,20 +203,20 @@ public class WrapperDriver implements Driver {
      * Masks password properties for security.
      */
     private static void sysout(String originalUrl, String cleanUrl, boolean debugMode, Properties info) {
-        log("=== WrapperDriver CONNECT ===");
-        log("Original URL: " + originalUrl);
-        log("Clean URL: " + cleanUrl);
-        log("Debug mode: " + debugMode);
+        logFunction.accept("=== WrapperDriver CONNECT ===");
+        logFunction.accept("Original URL: " + originalUrl);
+        logFunction.accept("Clean URL: " + cleanUrl);
+        logFunction.accept("Debug mode: " + debugMode);
 
         if (info != null && !info.isEmpty()) {
-        	log("Properties:");
+        	logFunction.accept("Properties:");
             info.forEach((k, v) -> {
                 String key = String.valueOf(k);
                 String value = "password".equalsIgnoreCase(key) ? "****" : String.valueOf(v);
                 log("  " + key + " = " + value);
             });
         }
-        log("================================");
+        logFunction.accept("================================");
     }
 
     /**
