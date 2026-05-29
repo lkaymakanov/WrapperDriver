@@ -17,8 +17,8 @@
     wrapperdebug:jdbc:postgresql://host:port/db?driverLogger=com.example.MyLogger
 
 
-Tomcat resource exmple:
-  
+Tomcat resource example:
+<pre>
   Resource
       auth="Container"
       driverClassName="com.is.util.db.driver.wrapper.WrapperDriver"
@@ -33,7 +33,27 @@ Tomcat resource exmple:
       stringtype="unspecified"
       testOnBorrow="true"
       validationQuery="SELECT 1"
-      validationInterval="30000"
+      validationInterval="30000" 
+</pre>
 
+or in order to log sql queries to console.
+
+<pre>
+  Resource
+      auth="Container"
+      driverClassName="com.is.util.db.driver.wrapper.WrapperDriver"
+      maxActive="30"
+      maxIdle="10"
+      maxWait="-1"
+      name="jdbc/ltf"
+      password="pass"
+      type="javax.sql.DataSource"
+      url="wrapperdebug:jdbc:postgresql://host:port/db?driverLogger=com.example.MyLogger"
+      username="user"
+      stringtype="unspecified"
+      testOnBorrow="true"
+      validationQuery="SELECT 1"
+      validationInterval="30000" 
+</pre>
  
  
