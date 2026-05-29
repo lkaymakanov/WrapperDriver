@@ -16,8 +16,10 @@
     wrapper:jdbc:postgresql://host:port/db?driverLogger=com.example.MyLogger
     wrapperdebug:jdbc:postgresql://host:port/db?driverLogger=com.example.MyLogger
 
-    
-  <Resource
+
+Tomcat resource exmple:
+  
+  Resource
       auth="Container"
       driverClassName="com.is.util.db.driver.wrapper.WrapperDriver"
       maxActive="30"
@@ -32,6 +34,6 @@
       testOnBorrow="true"
       validationQuery="SELECT 1"
       validationInterval="30000"
-/>
+
  
  
